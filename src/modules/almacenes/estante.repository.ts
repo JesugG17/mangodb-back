@@ -51,6 +51,20 @@ export class EstanteRepository {
     });
   }
 
+  async obtenerEstantesPorAlmacenId(almacenId: number) {
+    return AppDataSource.getRepository(Estante).find({
+      where: {
+        almacen: almacenId
+      },
+      order: {
+        id: 'ASC'
+      },
+      relations: {
+        caja: true
+      }
+    });
+  }
+
   async actualizarEstante(estante: Estante) {
     await AppDataSource.getRepository(Estante).update({ id: estante.id, division: estante.division, particion: estante.particion, almacen: estante.almacen }, estante);
   }

@@ -4,6 +4,7 @@ import { CajaRepository } from "../cajas/cajas.repositoy";
 import { CajaService } from "../cajas/cajas.service";
 import { EstanteRepository } from "./estante.repository";
 import { EstanteService } from "./estante.service";
+import { AlmacenService } from "./almacen.service";
 
 export class AlmacenRoutes {
 
@@ -13,11 +14,12 @@ export class AlmacenRoutes {
     const cajaService = new CajaService(cajaRepository);
     const estanteRepository = new EstanteRepository();
     const estanteService = new EstanteService(estanteRepository);
-    const almacenController = new AlmacenController(cajaService, estanteService);
+    const almacenService = new AlmacenService(estanteService);
+    const almacenController = new AlmacenController(cajaService, almacenService);
 
     router.post('/asignar-espacio', almacenController.ingresarCaja);
 
-    router.post('/estante', almacenController.obtenerCaja)
+    router.get('/:almacenId', almacenController.obtenerAlmacen);
 
     return router;
   }

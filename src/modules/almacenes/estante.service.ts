@@ -66,6 +66,24 @@ export class EstanteService {
     }
   }
 
+  async obtenerEstantesPorAlmacenId(almacenId: number) {
+    const estantes = await this.estanteRepository.obtenerEstantesPorAlmacenId(almacenId);
+
+    if (!estantes.length) {
+      return {
+        isValid: false,
+        code: 404,
+        message: `No hay estantes para el almacen ${almacenId}`
+      };
+    }
+
+    return {
+      isValid: true,
+      code: 200,
+      data: estantes
+    }
+  }
+
   private calcularSiguienteEspacio({ numEstante, numDivision, numParticion }: { numEstante: number, numDivision: number, numParticion: number }) {
     if (numParticion < MAX_PARTICION) {
       return {
