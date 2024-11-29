@@ -1,4 +1,4 @@
-import { IsNull } from "typeorm";
+import { IsNull, Not } from "typeorm";
 import { Estante } from "../../core/db/entities/estante-entity";
 import { AppDataSource } from "../../core/db/data-source";
 
@@ -7,7 +7,7 @@ export class EstanteRepository {
   async checarEspaciosDisponibles(idAlmacen: number) {
     return await AppDataSource.getRepository(Estante).count({
       where: {
-        caja: IsNull(),
+        caja: Not(IsNull()),
         almacen: idAlmacen
       }
     });
@@ -19,21 +19,11 @@ export class EstanteRepository {
         fechaIngreso: 'DESC'
       },
       where: {
-        almacen: idAlmacen
+        almacen: idAlmacen,
+        caja: Not(IsNull())
       },
       
     });
-
-    if (!estante) {
-      return await AppDataSource.getRepository(Estante).findOne({
-        where: {
-          id: 1,
-          division: 1,
-          particion: 1,
-          almacen: idAlmacen
-        }
-      });
-    }
 
     return estante;
   }
@@ -49,7 +39,19 @@ export class EstanteRepository {
     });
   }
 
+  async obtenerEstantePorId(estanteId: number, almacenId: number) {
+    return AppDataSource.getRepository(Estante).find({
+      where: {
+        almacen: almacenId,
+        id: estanteId
+      },
+      relations: {
+        caja: true
+      }
+    });
+  }
+
   async actualizarEstante(estante: Estante) {
-    await AppDataSource.getRepository(Estante).update(estante.id, estante);
+    await AppDataSource.getRepository(Estante).update({ id: estante.id, division: estante.division, particion: estante.particion, almacen: estante.almacen }, estante);
   }
 }

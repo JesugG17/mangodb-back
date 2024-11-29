@@ -19,7 +19,8 @@ export class Estante extends BaseEntity {
   particion: number;
 
   @Column({
-    primary: true
+    primary: true,
+    name: 'almacen_id'
   })
   almacen: number;
 
@@ -29,7 +30,8 @@ export class Estante extends BaseEntity {
 
   @Column({
     type: 'timestamp',
-    name: 'fecha_ingreso'
+    name: 'fecha_ingreso',
+    nullable: true
   })
   fechaIngreso: Date
 

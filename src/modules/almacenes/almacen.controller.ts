@@ -17,4 +17,12 @@ export class AlmacenController {
 
     res.send(response);
   }
+
+  obtenerCaja = async(req: Request, res: Response) => {
+    const { estanteId, almacenId } = req.body;
+
+    const response = await this.estanteService.obtenerEstantePorId(estanteId, almacenId);
+
+    res.status(response.code).send(response);
+  }
 }

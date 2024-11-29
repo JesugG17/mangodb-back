@@ -10,6 +10,7 @@ import { Caja } from './entities/caja-entity';
 
 import { SensorCrecimiento } from './entities/sensor-crecimiento-entity';
 import { SensorProducto } from './entities/sensor-producto-entity';
+import { Estante } from './entities/estante-entity';
 
 export const AppDataSource = new DataSource({
   type: 'postgres',
@@ -29,6 +30,7 @@ export const AppDataSource = new DataSource({
     Caja,
     SensorCrecimiento,
     SensorProducto,
+    Estante
   ],
   subscribers: [],
   migrations: [],

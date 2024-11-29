@@ -4,6 +4,7 @@ import { UsersRoutes } from './users/users.routes';
 import { HectareasRoutes } from './hectareas/hectareas.routes';
 import { CajasRoutes } from './cajas/cajas.routes';
 import { PlantasRoutes } from './plantas/plantas.routes';
+import { AlmacenRoutes } from './almacenes/almacen.routes';
 
 export class AppRoutes {
   static get routes(): Router {
@@ -14,6 +15,7 @@ export class AppRoutes {
     router.use('/api/hectareas', HectareasRoutes.routes);
     router.use('/api/cajas', CajasRoutes.routes);
     router.use('/api/plantas', PlantasRoutes.routes);
+    router.use('/api/almacenes', AlmacenRoutes.routes);
 
     return router;
   }

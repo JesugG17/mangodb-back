@@ -17,6 +17,7 @@ export class AlmacenRoutes {
 
     router.post('/asignar-espacio', almacenController.ingresarCaja);
 
+    router.post('/estante', almacenController.obtenerCaja)
 
     return router;
   }

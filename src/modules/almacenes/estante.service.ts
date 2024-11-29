@@ -5,6 +5,7 @@ import { EstanteRepository } from "./estante.repository";
 const CAPACIDAD_ALMACEN = 20;
 const MAX_PARTICION = 5;
 const MAX_DIVISION = 2;
+const MAX_ESTANTE = 2;
 
 export class EstanteService {
   constructor(
@@ -12,52 +13,80 @@ export class EstanteService {
   ) {}
 
   async asignarEspacioCaja(caja: Caja, idAlmacen: number) {
-    const espacios = await this.estanteRepository.checarEspaciosDisponibles(idAlmacen);
+    const espaciosOcupados = await this.estanteRepository.checarEspaciosDisponibles(idAlmacen);
 
-    if (espacios === CAPACIDAD_ALMACEN) {
+    if (espaciosOcupados === CAPACIDAD_ALMACEN) {
       return {
         isValid: false,
         message: 'El almacen ya esta lleno'
       };
     }
 
-    const estante = await this.estanteRepository.obtenerUltimoEstante(idAlmacen);
-    
-    if (!estante) {
-      return {};
-    }
-
-    let numEstante = estante.id;
-    let numDivision = estante.division;
-    let numParticion = estante.particion;
-
-    if (numParticion === MAX_PARTICION) {
-      if (numDivision === MAX_DIVISION) {
-        numEstante++;
-        numDivision = 1;
-        numParticion = 1;
-      } else {
-        numDivision++;
-        numParticion = 1;
-      }
-    } else {
-      numParticion++;
-    }
+    const estante = await this.estanteRepository.obtenerUltimoEstante(idAlmacen) as Estante;
+    const siguienteEspacio  = this.calcularSiguienteEspacio({
+      numEstante: estante ? estante.id : 1,
+      numDivision: estante ? estante.division : 1,
+      numParticion: estante ? estante.particion : 0
+    });
 
     const estanteDisponible = await this.estanteRepository.obtenerEstanteDisponible({
-      estante: numEstante,
-      division: numDivision,
-      particion: numParticion,
+      estante: siguienteEspacio.numEstante,
+      division: siguienteEspacio.numDivision,
+      particion: siguienteEspacio.numParticion,
       almacen: idAlmacen
     }) as Estante;
    
     estanteDisponible.caja = caja;
     estanteDisponible.fechaIngreso = new Date();
+
     await this.estanteRepository.actualizarEstante(estanteDisponible);
 
     return {
       isValid: true,
       message: 'Caja introducida correctamente'
+    };
+  }
+
+  async obtenerEstantePorId(estanteId: number, almacenId: number) {
+
+    const estante = await this.estanteRepository.obtenerEstantePorId(estanteId, almacenId);
+
+    if (!estante.length) {
+      return {
+        isValid: false,
+        code: 404,
+        message: 'Este estante no existe'
+      }
+    }
+
+    return {
+      isValid: true,
+      code: 200,
+      data: estante
+    }
+  }
+
+  private calcularSiguienteEspacio({ numEstante, numDivision, numParticion }: { numEstante: number, numDivision: number, numParticion: number }) {
+    if (numParticion < MAX_PARTICION) {
+      return {
+        numParticion: numParticion + 1,
+        numDivision,
+        numEstante
+      };
+    }
+  
+    if (numDivision < MAX_DIVISION) {
+      return {
+        numParticion: 1,
+        numDivision: numDivision + 1,
+        numEstante
+      };
+    }
+  
+    return {
+      numParticion: 1,
+      numDivision: 1,
+      numEstante: numEstante < MAX_ESTANTE ? numEstante + 1 : 1
     };
   }
 }
