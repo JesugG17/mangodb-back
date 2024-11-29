@@ -43,9 +43,7 @@ INSERT INTO opciones (ruta, texto, icono) VALUES
 ('/dashboard/inicio', 'Inicio', 'home'),
 ('/dashboard/almacen', 'Almacen', 'package'),
 ('/dashboard/hectarea', 'Hectareas', 'sprout'),
-('/dashboard/cat-usuarios', 'Cat. Usuarios', 'users'),
-('/dashboard/cajas', 'Regis. Cajas', 'package'),
-('/dashboard/cat-hectareas', 'Cat. Hectareas', 'layers');
+('/dashboard/cat-usuarios', 'Cat. Usuarios', 'users');
 
 -- Now, assuming your roles table has these IDs (adjust if different):
 -- admin = 1
@@ -67,7 +65,7 @@ WHERE ruta IN ('/dashboard/inicio', '/dashboard/almacen');
 INSERT INTO roles_opciones (opcionId, roleId)
 SELECT id, 3
 FROM opciones
-WHERE ruta IN ('/dashboard/inicio', '/dashboard/cajas');
+WHERE ruta IN ('/dashboard/inicio', '/dashboard/hectarea');
 
 
 CREATE TABLE sensor_producto (

@@ -9,13 +9,9 @@ export class CajaService {
   async crearCaja(kg: number, tipo: string, planta: Planta) {
     let caja = new Caja();
     caja.kg = kg;
-    console.log(caja.kg);
-    caja.Planta = planta;
-    console.log(caja.Planta);
+    caja.planta = planta;
     caja.fecha = new Date();
-    console.log(caja.fecha);
     caja.tipo = tipo;
-    console.log(caja.tipo);
 
     caja = await this.cajaRepository.guardarCaja(caja);
     if (!caja) {

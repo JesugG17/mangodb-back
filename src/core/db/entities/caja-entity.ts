@@ -16,7 +16,9 @@ export class Caja extends BaseEntity {
   kg: number;
 
   @ManyToOne(() => Planta, (planta) => planta.idPlanta)
-  Planta: Planta;
+  @JoinColumn({ name: 'planta_id' })
+  planta: Planta;
+
   @Column()
   fecha: Date;
   @Column()
