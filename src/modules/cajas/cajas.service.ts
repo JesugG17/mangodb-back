@@ -1,19 +1,15 @@
-import { isValid } from 'zod';
-import { Caja } from '../../core/db/entities/caja-entity';
+// import { Caja } from '../../core/db/entities/caja-entity';
 import { Planta } from '../../core/db/entities/planta-entity';
+import { Caja } from '../../core/models/caja-model';
 import { CajaRepository } from './cajas.repositoy';
 
 export class CajaService {
   constructor(private readonly cajaRepository: CajaRepository) {}
 
   async crearCaja(kg: number, tipo: string, planta: Planta) {
-    let caja = new Caja();
-    caja.kg = kg;
-    caja.planta = planta;
-    caja.fecha = new Date();
-    caja.tipo = tipo;
+    const caja = new Caja(kg, planta, new Date(), tipo);
 
-    caja = await this.cajaRepository.guardarCaja(caja);
+    await this.cajaRepository.guardarCaja(caja);
     if (!caja) {
       return { isValid: false, reason: 'error al registrar la caja' };
     }

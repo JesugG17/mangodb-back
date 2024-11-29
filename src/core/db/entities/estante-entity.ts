@@ -1,5 +1,5 @@
 import { BaseEntity, Column, Entity, JoinColumn, OneToOne } from 'typeorm';
-import { Caja } from './caja-entity';
+import { CajaEntity } from './caja-entity';
 
 @Entity('estantes')
 export class Estante extends BaseEntity {
@@ -24,9 +24,9 @@ export class Estante extends BaseEntity {
   })
   almacen: number;
 
-  @OneToOne(() => Caja, (caja) => caja.idCaja)
+  @OneToOne(() => CajaEntity, (caja) => caja.idCaja)
   @JoinColumn({ name: 'caja' })
-  caja: Caja;
+  caja: CajaEntity;
 
   @Column({
     type: 'timestamp',

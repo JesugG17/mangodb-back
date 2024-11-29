@@ -1,4 +1,4 @@
-import { Caja } from "../../core/db/entities/caja-entity";
+import { CajaEntity } from "../../core/db/entities/caja-entity";
 import { Estante } from "../../core/db/entities/estante-entity";
 import { EstanteRepository } from "./estante.repository";
 
@@ -12,7 +12,7 @@ export class EstanteService {
     private readonly estanteRepository: EstanteRepository
   ) {}
 
-  async asignarEspacioCaja(caja: Caja, idAlmacen: number) {
+  async asignarEspacioCaja(caja: CajaEntity, idAlmacen: number) {
     const espaciosOcupados = await this.estanteRepository.checarEspaciosDisponibles(idAlmacen);
 
     if (espaciosOcupados === CAPACIDAD_ALMACEN) {

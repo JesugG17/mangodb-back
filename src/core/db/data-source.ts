@@ -6,7 +6,7 @@ import { ENV } from '../utils/env';
 import { Planta } from './entities/planta-entity';
 import { Opcion } from './entities/opciones-entity';
 import { RolesOpciones } from './entities/roles-opciones-entity';
-import { Caja } from './entities/caja-entity';
+import { CajaEntity } from './entities/caja-entity';
 
 import { SensorCrecimiento } from './entities/sensor-crecimiento-entity';
 import { SensorProducto } from './entities/sensor-producto-entity';
@@ -27,7 +27,7 @@ export const AppDataSource = new DataSource({
     Planta,
     Opcion,
     RolesOpciones,
-    Caja,
+    CajaEntity,
     SensorCrecimiento,
     SensorProducto,
     Estante

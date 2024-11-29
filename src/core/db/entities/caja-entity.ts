@@ -9,7 +9,7 @@ import {
 import { Planta } from './planta-entity';
 
 @Entity('cajas')
-export class Caja extends BaseEntity {
+export class CajaEntity extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'id_caja' })
   idCaja: number;
   @Column()
