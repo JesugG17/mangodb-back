@@ -19,7 +19,7 @@ export class SensoresWorker implements WorkerInterface {
   }
 
   private async simularSensorCrecimiento() {
-    const INTERVAL = 1000 * 60 * 60 * 24; // Cada 24 horas
+    const INTERVAL = 1000 * 60; // Cada minuto
 
     const simular = async () => {
       const plantas = await this.plantasService.obtenerPlantasConSensorDeCrecimiento();
@@ -45,7 +45,7 @@ export class SensoresWorker implements WorkerInterface {
   }
 
   private async simularSensorProducto() {
-    const INTERVAL = 1000 * 60 * 60 * 24; // Cada 24 horas
+    const INTERVAL = 1000 * 60; // Cada minuto
 
     const simular = async () => {
       const plantas = await this.plantasService.obtenerPlantasConSensorDeProducto();
@@ -69,11 +69,6 @@ export class SensoresWorker implements WorkerInterface {
     }, INTERVAL);
   }
 
-  start() {
-    this.simularSensorCrecimiento();
-    this.simularSensorProducto();
-  }
-
   private generarRandomEnRango(min: number, max: number): number {
     return +(Math.random() * (max - min) + min).toFixed(2);
   }
@@ -92,4 +87,8 @@ export class SensoresWorker implements WorkerInterface {
     return redondear(+nuevoValor);
   }  
 
+  start() {
+    this.simularSensorCrecimiento();
+    this.simularSensorProducto();
+  }
 }

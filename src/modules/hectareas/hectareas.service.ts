@@ -39,7 +39,10 @@ export class HectareaService {
   async obtenerHectarea(idHectarea: number) {
     const hectareaDb = await this.hectareaRepository.obtenerHectareaPorId(idHectarea, { 
       relations: { 
-        plantas: true 
+        plantas: {
+          sensorCrecimiento: true,
+          sensorProducto: true
+        }
       },
       order: {
         plantas: {
@@ -65,7 +68,7 @@ export class HectareaService {
         ...planta,
         aptaSensorCrecimiento: currentDate.getTime() - new Date(planta.fechaCreada).getTime() >= MONTH,
         aptaSensorProducto: currentDate.getTime() - new Date(planta.fechaCreada).getTime() >= (MONTH * 6)
-      })).sort((a, b) => a.idPlanta - b.idPlanta)
+      }))
     };
 
     return {
