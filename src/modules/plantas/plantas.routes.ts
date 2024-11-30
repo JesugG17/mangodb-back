@@ -18,13 +18,13 @@ export class PlantasRoutes {
 
     router.post(
       '/asignar-sensor-crecimiento',
-      validateData(idPlantaSchemaBody),
+      validateData(idPlantaSchemaBody, 'body'),
       plantasController.asignarSensorCrecimiento
     );
 
     router.post(
       '/asignar-sensor-producto',
-      validateData(idPlantaSchemaBody),
+      validateData(idPlantaSchemaBody, 'body'),
       plantasController.crearSensorProducto
     );
 

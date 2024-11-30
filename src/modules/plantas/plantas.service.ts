@@ -11,7 +11,7 @@ export class PlantasService {
 
   async asignarSensorCrecimiento(plantaId: number) {
     const plantaDb = await this.plantasRepository.obtenerPlantaPorId(plantaId);
-    
+
     if (!plantaDb) {
       return {
         isValid: false,

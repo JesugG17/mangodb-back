@@ -37,7 +37,16 @@ export class HectareaService {
   }
 
   async obtenerHectarea(idHectarea: number) {
-    const hectareaDb = await this.hectareaRepository.obtenerHectareaPorId(idHectarea, { relations: { plantas: true }}); 
+    const hectareaDb = await this.hectareaRepository.obtenerHectareaPorId(idHectarea, { 
+      relations: { 
+        plantas: true 
+      },
+      order: {
+        plantas: {
+          idPlanta: 'ASC'
+        }
+      }
+    }); 
   
     if(!hectareaDb) {
       return {
