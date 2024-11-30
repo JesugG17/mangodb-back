@@ -44,7 +44,14 @@ export class EstanteService {
 
     return {
       isValid: true,
-      message: 'Caja introducida correctamente'
+      message: 'Caja introducida correctamente',
+      data: {
+        idCaja: estanteDisponible.caja.idCaja,
+        fechaRegistro: estanteDisponible.fechaIngreso,
+        estante: estanteDisponible.id,
+        division: estanteDisponible.division,
+        particion: estanteDisponible.particion
+      }
     };
   }
 
