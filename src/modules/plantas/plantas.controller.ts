@@ -6,12 +6,12 @@ export class PlantasController {
   constructor(private readonly plantasService: PlantasService) {}
 
   asignarSensorCrecimiento = async (req: Request, res: Response) => {
-    const response = await this.plantasService.asignarSensorCrecimiento(req.body);
+    const response = await this.plantasService.asignarSensorCrecimiento(req.body.plantaId);
     res.status(response.code).send(response);
   };
 
   crearSensorProducto = async (req: Request, res: Response) => {
-    const response = await this.plantasService.asignarSensorProducto(req.body);
+    const response = await this.plantasService.asignarSensorProducto(req.body.plantaId);
     res.status(response.code).send(response);
   };
 }
