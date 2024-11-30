@@ -33,9 +33,9 @@ export class Seed {
       roleId: 3
     };
 
-    usersRepository.createUser(admin);
-    usersRepository.createUser(gerenteAlmacen);
-    usersRepository.createUser(liderRecoleccion);
+    await usersRepository.createUser(admin);
+    await usersRepository.createUser(gerenteAlmacen);
+    await usersRepository.createUser(liderRecoleccion);
   }
 
 }

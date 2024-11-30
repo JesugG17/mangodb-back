@@ -1,4 +1,4 @@
-import { BaseEntity, Column, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany, OneToOne } from 'typeorm';
+import { BaseEntity, Column, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryColumn } from 'typeorm';
 import { CajaEntity } from './caja-entity';
 import { Almacen } from './almacen-entity';
 
@@ -19,9 +19,14 @@ export class Estante extends BaseEntity {
   })
   particion: number;
 
+  @Column({
+    primary: true,
+    name: 'almacen_id'
+  })
+  almancenId: number;
 
   @ManyToOne(() => Almacen, (almacen) => almacen.id)
-  @JoinColumn({ name: 'almacen_id' })
+  @JoinColumn({ name: 'almacen_id', referencedColumnName: 'id' })
   almacen: Almacen;
 
   @OneToOne(() => CajaEntity, (caja) => caja.idCaja)
