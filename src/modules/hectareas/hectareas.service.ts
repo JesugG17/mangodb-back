@@ -47,10 +47,22 @@ export class HectareaService {
       }
     }
 
+    const MONTH = 1000 * 60 * 60 * 24 * 30;
+    const currentDate = new Date();
+
+    const formattedHectarea = {
+      ...hectareaDb,
+      plantas: hectareaDb.plantas.map(planta => ({
+        ...planta,
+        aptaSensorCrecimiento: currentDate.getTime() - new Date(planta.fechaCreada).getTime() >= MONTH,
+        aptaSensorProducto: currentDate.getTime() - new Date(planta.fechaCreada).getTime() >= (MONTH * 6)
+      })).sort((a, b) => a.idPlanta - b.idPlanta)
+    };
+
     return {
       isValid: true,
       code: 200,
-      data: hectareaDb
+      data: formattedHectarea
     }
   }
 

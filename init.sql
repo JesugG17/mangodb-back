@@ -94,6 +94,7 @@ CREATE TABLE plantas (
   id_planta SERIAL PRIMARY KEY,
   hectarea_id INTEGER NOT NULL REFERENCES hectareas(id_hectarea) ON DELETE CASCADE,
   status TEXT NOT NULL DEFAULT 'SALUDABLE',
+  fecha_creada TIMESTAMP NOT NULL,
   sensor_producto_id INTEGER REFERENCES sensor_producto(id) ON DELETE SET NULL,
   sensor_crecimiento_id INTEGER REFERENCES sensor_crecimiento(id) ON DELETE SET NULL
 );

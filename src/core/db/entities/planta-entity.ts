@@ -19,6 +19,12 @@ export class Planta extends BaseEntity {
     default: 'SALUDABLE',
   })
   status: string;
+
+  @Column({
+    type: 'timestamp',
+    name: 'fecha_creada',
+  })
+  fechaCreada: Date;
   
   @OneToOne(() => SensorProducto)
   @JoinColumn({ name: 'sensor_producto_id' })

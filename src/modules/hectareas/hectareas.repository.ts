@@ -3,7 +3,7 @@ import { Planta } from '../../core/db/entities/planta-entity';
 import { CreateHectareaDto } from './dto/create-hectarea.dto';
 import { AppDataSource } from '../../core/db/data-source';
 import { UpdateHectareaDto } from './dto/update-hectarea.dto';
-import { FindOneOptions } from 'typeorm';
+
 export class HectareaRepository {
   async crearHectarea(nuevaHectarea: CreateHectareaDto) {
     const queryRunner = AppDataSource.createQueryRunner();
@@ -15,6 +15,7 @@ export class HectareaRepository {
       const plantas = Array.from({ length: 25 }, () => {
         const planta = new Planta();
         planta.hectarea = hectarea;
+        planta.fechaCreada = new Date();
         return planta;
       });
       await queryRunner.manager
