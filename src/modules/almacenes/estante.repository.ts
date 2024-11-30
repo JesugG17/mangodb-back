@@ -8,7 +8,9 @@ export class EstanteRepository {
     return await AppDataSource.getRepository(Estante).count({
       where: {
         caja: Not(IsNull()),
-        almacen: idAlmacen
+        almacen: {
+          id: idAlmacen
+        }
       }
     });
   }
@@ -19,7 +21,9 @@ export class EstanteRepository {
         fechaIngreso: 'DESC'
       },
       where: {
-        almacen: idAlmacen,
+        almacen: {
+          id: idAlmacen
+        },
         caja: Not(IsNull())
       },
       
@@ -34,35 +38,36 @@ export class EstanteRepository {
         id: estanteData.estante,
         division: estanteData.division,
         particion: estanteData.particion,
-        almacen: estanteData.almacen
+        almacen: {
+          id: estanteData.almacen
+        }
+      },
+      relations: {
+        almacen: true
       }
     });
   }
 
   async obtenerEstantePorId(estanteId: number, almacenId: number) {
-    return AppDataSource.getRepository(Estante).find({
-      where: {
-        almacen: almacenId,
-        id: estanteId
-      },
-      relations: {
-        caja: true
-      }
-    });
+    return AppDataSource.getRepository(Estante)
+      .createQueryBuilder('estantes')
+      .select('estantes.division', 'division')
+      .addSelect('estantes.particion', 'particion')
+      .addSelect('estantes.caja', 'caja')
+      .where('estantes.id = :estante', { estante: estanteId })
+      .andWhere('estantes.almacen = :almacen', { almacen: almacenId })
+      .getRawMany()
   }
 
   async obtenerEstantesPorAlmacenId(almacenId: number) {
-    return AppDataSource.getRepository(Estante).find({
-      where: {
-        almacen: almacenId
-      },
-      order: {
-        id: 'ASC'
-      },
-      relations: {
-        caja: true
-      }
-    });
+    return AppDataSource.getRepository(Estante)
+      .createQueryBuilder('estantes')
+      .select('estantes.id', 'id')
+      .addSelect('COUNT(estantes.caja)', 'espaciosOcupados')
+      .innerJoin('estantes.almacen', 'almacen')
+      .andWhere('almacen.id = :almacenId', { almacenId })
+      .groupBy('estantes.id')
+      .getRawMany();
   }
 
   async actualizarEstante(estante: Estante) {

@@ -3,6 +3,7 @@ import { Estante } from "../../core/db/entities/estante-entity";
 import { EstanteRepository } from "./estante.repository";
 
 const CAPACIDAD_ALMACEN = 20;
+const CAPACIDAD_POR_ESTANTE = 10;
 const MAX_PARTICION = 5;
 const MAX_DIVISION = 2;
 const MAX_ESTANTE = 2;
@@ -49,9 +50,9 @@ export class EstanteService {
 
   async obtenerEstantePorId(estanteId: number, almacenId: number) {
 
-    const estante = await this.estanteRepository.obtenerEstantePorId(estanteId, almacenId);
+    const estanteInfo = await this.estanteRepository.obtenerEstantePorId(estanteId, almacenId);
 
-    if (!estante.length) {
+    if (!estanteInfo.length) {
       return {
         isValid: false,
         code: 404,
@@ -59,10 +60,40 @@ export class EstanteService {
       }
     }
 
+    const data: any[] = []
+    for(let i = 0; i < estanteInfo.length; i++) {
+      const info = estanteInfo[i];
+      const index = data.findIndex((item) => item.division === info.division);
+
+      if (index !== -1) {
+        data[index].particiones.push({
+          particion: info.particion,
+          caja: info.caja
+        });
+        continue;
+      }
+      
+      data.push({
+        division: info.division,
+        particiones: [
+          {
+            particion: info.particion,
+            caja: info.caja
+          }
+        ]
+      });
+    } 
+
+    const formattedData = data.map(division => ({
+      ...division,
+      particiones: division.particiones.sort((a: any, b: any) => a.particion - b.particion)
+    }))
+    .sort((a, b) => a.division - b.division)
+
     return {
       isValid: true,
       code: 200,
-      data: estante
+      data: formattedData
     }
   }
 
@@ -70,18 +101,16 @@ export class EstanteService {
     const estantes = await this.estanteRepository.obtenerEstantesPorAlmacenId(almacenId);
 
     if (!estantes.length) {
-      return {
-        isValid: false,
-        code: 404,
-        message: `No hay estantes para el almacen ${almacenId}`
-      };
+      return null;
     }
 
-    return {
-      isValid: true,
-      code: 200,
-      data: estantes
-    }
+    const formattedEstantes = estantes.map(estante => ({
+      estante: estante.id,
+      disponibles: CAPACIDAD_POR_ESTANTE - estante.espaciosOcupados,
+      lleno: +estante.espaciosOcupados === CAPACIDAD_POR_ESTANTE
+    }));
+
+    return formattedEstantes
   }
 
   private calcularSiguienteEspacio({ numEstante, numDivision, numParticion }: { numEstante: number, numDivision: number, numParticion: number }) {

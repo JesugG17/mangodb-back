@@ -4,8 +4,8 @@ import { EstanteService } from "./estante.service";
 
 export class AlmacenService {
   constructor(
-    private readonly estanteService: EstanteService
-
+    private readonly estanteService: EstanteService,
+    private readonly almacenRepository: AlmacenRepository
   ) {}
 
   async entradaCaja(caja: CajaEntity, almacenId: number) {
@@ -13,9 +13,11 @@ export class AlmacenService {
   }
 
   async obtenerAlmacen(almacenId: number) {
-    const almacen = await this.estanteService.obtenerEstantesPorAlmacenId(almacenId);
+
+    const almacen = await this.almacenRepository.obtenerAlmacenPorId(almacenId);
+    const estantes = await this.estanteService.obtenerEstantesPorAlmacenId(almacenId);
     
-    if (!almacen) {
+    if (!estantes) {
       return {
         isValid: false,
         message: `El almacen con el id ${almacenId} no existe`,
@@ -23,7 +25,14 @@ export class AlmacenService {
       };
     }
 
-    return almacen;
+    return {
+      isValid: true,
+      code: 200,
+      data: {
+        almacen,
+        estantes: estantes
+      }
+    };
   }
 
 }

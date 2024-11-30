@@ -15,7 +15,6 @@ export class EstanteRoutes {
 
     router.post('/', estanteController.obtenerEstante)
 
-
     return router;
   }
 

@@ -1,12 +1,12 @@
 import { AppDataSource } from "../../core/db/data-source";
-import { Estante } from "../../core/db/entities/estante-entity";
+import { Almacen } from "../../core/db/entities/almacen-entity";
 
 export class AlmacenRepository {
 
   async obtenerAlmacenPorId(almacenId: number) {
-    return await AppDataSource.getRepository(Estante).find({
+    return await AppDataSource.getRepository(Almacen).findOne({
       where: {
-        almacen: almacenId
+        id: almacenId
       }
     })
   }
