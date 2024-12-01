@@ -105,6 +105,12 @@ CREATE TABLE cajas (
   planta_id INTEGER REFERENCES plantas(id_planta) ON DELETE SET NULL
 );
 
+CREATE TABLE concurrencia (
+  id serial PRIMARY KEY,
+  activo BOOLEAN NOT NULL
+);
+INSERT INTO concurrencia(activo) VALUES (FALSE);
+
 CREATE TABLE almacenes (
   id SERIAL PRIMARY KEY,
   tipo TEXT NOT NULL

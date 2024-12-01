@@ -38,10 +38,11 @@ export class AlmacenController {
         message: `La caja es de ${caja.tipo} y el almacen es de ${almacen?.tipo}`
       });
     }
-
-    const response = await this.almacenService.entradaCaja(caja!, almacen!);
-
-    res.send(response);
+    const isActivo = await this.almacenService.checarConcurrencia();
+    if(!isActivo){
+      const response = await this.almacenService.entradaCaja(caja!, almacen!);
+      res.send(response);
+    }
   }
 
   obtenerAlmacen = async(req: Request, res: Response) => {

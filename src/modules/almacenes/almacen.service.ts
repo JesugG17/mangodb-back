@@ -13,6 +13,10 @@ export class AlmacenService {
     return this.estanteService.asignarEspacioCaja(caja, almacen);
   }
 
+  async checarConcurrencia() {
+    return this.almacenRepository.checarConcurrencia();
+  }
+
   async obtenerAlmacen(almacenId: number) {
 
     const almacen = await this.almacenRepository.obtenerAlmacenPorId(almacenId);
