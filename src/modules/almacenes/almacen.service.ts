@@ -1,3 +1,4 @@
+import { Almacen } from "../../core/db/entities/almacen-entity";
 import { CajaEntity } from "../../core/db/entities/caja-entity";
 import { AlmacenRepository } from "./almacen.repository";
 import { EstanteService } from "./estante.service";
@@ -8,8 +9,8 @@ export class AlmacenService {
     private readonly almacenRepository: AlmacenRepository
   ) {}
 
-  async entradaCaja(caja: CajaEntity, almacenId: number) {
-    return this.estanteService.asignarEspacioCaja(caja, almacenId);
+  async entradaCaja(caja: CajaEntity, almacen: Almacen) {
+    return this.estanteService.asignarEspacioCaja(caja, almacen);
   }
 
   async obtenerAlmacen(almacenId: number) {

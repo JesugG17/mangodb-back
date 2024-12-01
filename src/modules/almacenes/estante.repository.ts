@@ -1,6 +1,7 @@
 import { IsNull, Not } from "typeorm";
 import { Estante } from "../../core/db/entities/estante-entity";
 import { AppDataSource } from "../../core/db/data-source";
+import { CajaEntity } from "../../core/db/entities/caja-entity";
 
 export class EstanteRepository {
   
@@ -72,5 +73,15 @@ export class EstanteRepository {
 
   async actualizarEstante(estante: Estante) {
     await AppDataSource.getRepository(Estante).update({ id: estante.id, division: estante.division, particion: estante.particion, almacen: estante.almacen }, estante);
+  }
+
+  async buscarCajaEnEstante(caja: CajaEntity) {
+    return await AppDataSource.getRepository(Estante).findOne({
+      where: {
+        caja: {
+          idCaja: caja.idCaja
+        }
+      }
+    })
   }
 }

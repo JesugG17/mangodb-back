@@ -1,6 +1,7 @@
 import { BaseEntity, Column, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryColumn } from 'typeorm';
 import { CajaEntity } from './caja-entity';
 import { Almacen } from './almacen-entity';
+import { Caja } from '../../models/caja-model';
 
 @Entity('estantes')
 export class Estante extends BaseEntity {

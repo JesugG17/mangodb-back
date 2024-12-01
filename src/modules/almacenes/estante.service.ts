@@ -1,3 +1,4 @@
+import { Almacen } from "../../core/db/entities/almacen-entity";
 import { CajaEntity } from "../../core/db/entities/caja-entity";
 import { Estante } from "../../core/db/entities/estante-entity";
 import { EstanteRepository } from "./estante.repository";
@@ -13,8 +14,8 @@ export class EstanteService {
     private readonly estanteRepository: EstanteRepository
   ) {}
 
-  async asignarEspacioCaja(caja: CajaEntity, idAlmacen: number) {
-    const espaciosOcupados = await this.estanteRepository.checarEspaciosDisponibles(idAlmacen);
+  async asignarEspacioCaja(caja: CajaEntity, almacen: Almacen) {
+    const espaciosOcupados = await this.estanteRepository.checarEspaciosDisponibles(almacen.id);
 
     if (espaciosOcupados === CAPACIDAD_ALMACEN) {
       return {
@@ -23,7 +24,16 @@ export class EstanteService {
       };
     }
 
-    const estante = await this.estanteRepository.obtenerUltimoEstante(idAlmacen) as Estante;
+    const cajaYaIngresada = await this.estanteRepository.buscarCajaEnEstante(caja);
+
+    if (cajaYaIngresada) {
+      return {
+        isValid: false,
+        message: 'Esta caja ya fue ingresada al almacen'
+      };
+    }
+
+    const estante = await this.estanteRepository.obtenerUltimoEstante(almacen.id) as Estante;
     const siguienteEspacio  = this.calcularSiguienteEspacio({
       numEstante: estante ? estante.id : 1,
       numDivision: estante ? estante.division : 1,
@@ -34,7 +44,7 @@ export class EstanteService {
       estante: siguienteEspacio.numEstante,
       division: siguienteEspacio.numDivision,
       particion: siguienteEspacio.numParticion,
-      almacen: idAlmacen
+      almacen: almacen.id
     }) as Estante;
    
     estanteDisponible.caja = caja;

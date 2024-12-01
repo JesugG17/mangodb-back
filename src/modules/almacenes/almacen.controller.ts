@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { CajaService } from "../cajas/cajas.service";
 import { AlmacenRepository } from "./almacen.repository";
 import { AlmacenService } from "./almacen.service";
+import { HTTP_CODE } from "../../core/utils/http-codes";
 
 export class AlmacenController {
   constructor(
@@ -14,7 +15,31 @@ export class AlmacenController {
 
     const caja = await this.cajaService.obtenerCaja(idCaja);
 
-    const response = await this.almacenService.entradaCaja(caja!, idAlmacen);
+    if (!caja) {
+      return res.status(HTTP_CODE.NOT_FOUND).send({
+        isValid: false,
+        message: `La caja con el id ${idCaja} no existe`
+      });
+    }
+
+    const { isValid, data } = await this.almacenService.obtenerAlmacen(idAlmacen);
+
+    if (!isValid || !data) {
+      return res.status(HTTP_CODE.NOT_FOUND).send({
+        isValid: false,
+        message: `El almacen con el id ${idAlmacen} no existe`
+      });
+    }
+
+    const { almacen } = data;
+    if (caja.tipo !== almacen?.tipo) {
+      return res.status(HTTP_CODE.NOT_FOUND).send({
+        isValid: false,
+        message: `La caja es de ${caja.tipo} y el almacen es de ${almacen?.tipo}`
+      });
+    }
+
+    const response = await this.almacenService.entradaCaja(caja!, almacen!);
 
     res.send(response);
   }
