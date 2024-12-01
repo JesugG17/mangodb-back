@@ -38,16 +38,11 @@ export class VentaRepository {
           );
           break;
         }
-        estante.caja.kg = 0;
-        await queryRunner.manager.update(
-          CajaEntity,
-          { idCaja: estante.caja.idCaja },
-          { kg: estante.caja.kg }
-        );
         await queryRunner.manager.query(
           'UPDATE estantes set caja=null,fecha_ingreso=null WHERE id=$1 AND division=$2 AND particion=$3',
           [estante.id, estante.division, estante.particion]
         );
+        await queryRunner.manager.delete(CajaEntity, { idCaja: estante.caja.idCaja });
       }
       const nuevaVenta = new Venta();
       nuevaVenta.kilosVendidos = kilos;
