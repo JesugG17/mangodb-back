@@ -1,3 +1,4 @@
+import { Hectarea } from '../../core/db/entities/hectarea-entity';
 import { HECTAREA_STATUS } from '../../core/utils/constants';
 import { CajaService } from '../cajas/cajas.service';
 import { CreateHectareaDto } from './dto/create-hectarea.dto';
@@ -24,11 +25,11 @@ export class HectareaService {
     return await this.hectareaRepository.crearHectarea(hectareaDto);
   }
 
-  async obtenerHectareas() {
-    return await this.hectareaRepository.obtenerHectareas();
+  async obtenerHectareas(filters = {}) {
+    return await this.hectareaRepository.obtenerHectareas(filters);
   }
 
-  async actualizarHectarea(idHectarea: number, hectareaDto: UpdateHectareaDto) {
+  async actualizarHectarea(idHectarea: number, hectareaDto: Hectarea) {
     return await this.hectareaRepository.actualizarHectarea(idHectarea, hectareaDto);
   }
 
@@ -59,7 +60,7 @@ export class HectareaService {
       }
     }
 
-    const MONTH = 1000 * 60 * 60 * 24 * 30;
+    const MONTH = 1000 * 60 //1000 * 60 * 60 * 24 * 30;
     const currentDate = new Date();
 
     const formattedHectarea = {
@@ -103,6 +104,4 @@ export class HectareaService {
       message: 'La hectarea ha sido autorizada exitosamente',
     };
   }
-
-  async checarEstatusHectareas() {}
 }

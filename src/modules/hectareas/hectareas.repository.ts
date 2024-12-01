@@ -3,6 +3,7 @@ import { Planta } from '../../core/db/entities/planta-entity';
 import { CreateHectareaDto } from './dto/create-hectarea.dto';
 import { AppDataSource } from '../../core/db/data-source';
 import { UpdateHectareaDto } from './dto/update-hectarea.dto';
+import { IsNull, Not } from 'typeorm';
 
 export class HectareaRepository {
   async crearHectarea(nuevaHectarea: CreateHectareaDto) {
@@ -33,11 +34,20 @@ export class HectareaRepository {
       await queryRunner.release();
     }
   }
-  async obtenerHectareas() {
+  async obtenerHectareas(filters = {}) {
     try {
-      const hectareas = await AppDataSource.getRepository(Hectarea).find();
+      const hectareas = await AppDataSource.getRepository(Hectarea).find({
+        relations: {
+          plantas: {
+            sensorCrecimiento: true,
+            sensorProducto: true
+          },
+        },
+        ...filters
+      });
       return { isValid: true, data: hectareas };
     } catch (error) {
+      console.log(error);
       return { isValid: false, message: 'Error obteniendo hectareas' };
     }
   }
@@ -52,9 +62,10 @@ export class HectareaRepository {
     return hectareaDb;
   }
 
-  async actualizarHectarea(idHectarea: number, hectareaData: UpdateHectareaDto | Hectarea) {
+  async actualizarHectarea(idHectarea: number, hectareaData: Hectarea) {
     try {
-      await AppDataSource.getRepository(Hectarea).update(idHectarea, hectareaData);
+      const { plantas, ...rest } = hectareaData;
+      await AppDataSource.getRepository(Hectarea).update(idHectarea, rest);
       return { isValid: true };
     } catch (error) {
       return { isValid: false, message: 'Error actualizando hectarea' };

@@ -45,7 +45,8 @@ export class AuthService {
         token,
         user: {
           name: userDb.nombres,
-          correo: userDb.correo
+          correo: userDb.correo,
+          role: userDb.role.nombre
         }
       }
     };

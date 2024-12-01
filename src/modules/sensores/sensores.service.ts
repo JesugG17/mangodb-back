@@ -41,8 +41,13 @@ export class SensoresService {
     for(let i = 0; i < hectareas.length; i++) {
       let totalPlantasBuenas = 0;
       const totalPlantas = hectareas[i].plantas.length;
-      for(let j = 0; j < hectareas[i].plantas.length; i++) {
+      for(let j = 0; j < totalPlantas; j++) {
         const planta = hectareas[i].plantas[j];
+
+        if (!planta.sensorCrecimiento || !planta.sensorProducto) {
+          continue;
+        }
+
         const [sensorCrecimiento, sensorProducto] = await Promise.all([
           this.sensoresRepository.obtenerSensorCrecimientoPorId(planta.sensorCrecimiento.id),
           this.sensoresRepository.obtenerSensorProductoPorId(planta.sensorProducto.id)
@@ -55,10 +60,12 @@ export class SensoresService {
       }
 
       if ((totalPlantasBuenas / totalPlantas) * 100 >= 80) {
-        // TODO: Cambiar estado de la hectarea y guardar
+        hectareas[i].setStatus = 'COSECHABLE';
+        hectareasListasParaCosecha.push(hectareas[i]);
       }
     }
 
+    return hectareasListasParaCosecha;
   }
 
   async crearSensorCrecimiento() {
@@ -102,7 +109,7 @@ export class SensoresService {
       return false;
     }
 
-    if (altura < MAX_ALTURA) {
+    if (altura < MIN_ALTURA) {
       return false;
     }
 
