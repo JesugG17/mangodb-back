@@ -114,6 +114,13 @@ INSERT INTO almacenes(tipo) VALUES
 ('CALIDAD'),
 ('NO CALIDAD');
 
+CREATE TABLE concurrencia (
+  id serial PRIMARY KEY,
+  calidad number NOT NULL
+);
+INSERT INTO concurrencia(calidad) VALUES (1);
+INSERT INTO concurrencia(calidad) VALUES (2);
+
 CREATE TABLE estantes (
   id INTEGER NOT NULL,
   division INTEGER NOT NULL,

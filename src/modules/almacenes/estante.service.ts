@@ -2,7 +2,6 @@ import { Almacen } from "../../core/db/entities/almacen-entity";
 import { CajaEntity } from "../../core/db/entities/caja-entity";
 import { Estante } from "../../core/db/entities/estante-entity";
 import { EstanteRepository } from "./estante.repository";
-
 const CAPACIDAD_ALMACEN = 20;
 const CAPACIDAD_POR_ESTANTE = 10;
 const MAX_PARTICION = 5;
@@ -32,14 +31,13 @@ export class EstanteService {
         message: 'Esta caja ya fue ingresada al almacen'
       };
     }
-
+    const concurrencia = await this.estanteRepository.abrirConcurrencia(almacen.id);
     const estante = await this.estanteRepository.obtenerUltimoEstante(almacen.id) as Estante;
     const siguienteEspacio  = this.calcularSiguienteEspacio({
       numEstante: estante ? estante.id : 1,
       numDivision: estante ? estante.division : 1,
       numParticion: estante ? estante.particion : 0
     });
-
     const estanteDisponible = await this.estanteRepository.obtenerEstanteDisponible({
       estante: siguienteEspacio.numEstante,
       division: siguienteEspacio.numDivision,
@@ -51,6 +49,7 @@ export class EstanteService {
     estanteDisponible.fechaIngreso = new Date();
 
     await this.estanteRepository.actualizarEstante(estanteDisponible);
+    await this.estanteRepository.cerrarConcurrencia(concurrencia);
 
     return {
       isValid: true,
