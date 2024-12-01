@@ -12,6 +12,7 @@ import { SensorCrecimiento } from './entities/sensor-crecimiento-entity';
 import { SensorProducto } from './entities/sensor-producto-entity';
 import { Estante } from './entities/estante-entity';
 import { Almacen } from './entities/almacen-entity';
+import { Venta } from './entities/venta-entity';
 
 export const AppDataSource = new DataSource({
   type: 'postgres',
@@ -32,7 +33,8 @@ export const AppDataSource = new DataSource({
     SensorCrecimiento,
     SensorProducto,
     Estante,
-    Almacen
+    Almacen,
+    Venta,
   ],
   subscribers: [],
   migrations: [],
