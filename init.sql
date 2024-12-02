@@ -176,3 +176,11 @@ INSERT INTO estantes (id, division, particion, almacen_id, caja, fecha_ingreso) 
 (2, 2, 4, 2, NULL, NULL),
 (2, 2, 5, 2, NULL, NULL);
 
+create table semaforos (
+  id INTEGER PRIMARY KEY,
+  nombre TEXT NOT NULL
+);
+
+INSERT INTO semaforos(id, nombre) VALUES
+(1, 'CALIDAD'),
+(2, 'NO CALIDAD')

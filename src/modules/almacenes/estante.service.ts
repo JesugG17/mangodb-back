@@ -1,6 +1,7 @@
 import { Almacen } from "../../core/db/entities/almacen-entity";
 import { CajaEntity } from "../../core/db/entities/caja-entity";
 import { Estante } from "../../core/db/entities/estante-entity";
+import { Semaforo } from "../../core/models/semaforo";
 import { EstanteRepository } from "./estante.repository";
 const CAPACIDAD_ALMACEN = 20;
 const CAPACIDAD_POR_ESTANTE = 10;
@@ -9,11 +10,14 @@ const MAX_DIVISION = 2;
 const MAX_ESTANTE = 2;
 
 export class EstanteService {
+
   constructor(
     private readonly estanteRepository: EstanteRepository
   ) {}
 
   async asignarEspacioCaja(caja: CajaEntity, almacen: Almacen) {
+    const semaforo = new Semaforo(almacen.id);
+    await semaforo.espera();
     const espaciosOcupados = await this.estanteRepository.checarEspaciosDisponibles(almacen.id);
 
     if (espaciosOcupados === CAPACIDAD_ALMACEN) {
@@ -31,7 +35,6 @@ export class EstanteService {
         message: 'Esta caja ya fue ingresada al almacen'
       };
     }
-    const concurrencia = await this.estanteRepository.abrirConcurrencia(almacen.id);
     const estante = await this.estanteRepository.obtenerUltimoEstante(almacen.id) as Estante;
     const siguienteEspacio  = this.calcularSiguienteEspacio({
       numEstante: estante ? estante.id : 1,
@@ -49,7 +52,7 @@ export class EstanteService {
     estanteDisponible.fechaIngreso = new Date();
 
     await this.estanteRepository.actualizarEstante(estanteDisponible);
-    await this.estanteRepository.cerrarConcurrencia(concurrencia);
+    await semaforo.libera();
 
     return {
       isValid: true,
