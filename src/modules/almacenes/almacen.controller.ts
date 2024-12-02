@@ -22,6 +22,13 @@ export class AlmacenController {
       });
     }
 
+    if (caja.kg === 0) {
+      return res.status(HTTP_CODE.BAD_REQUEST).send({
+        isValid: false,
+        message: 'No se puede ingresar una caja con 0 kilos'
+      });
+    }
+
     const { isValid, data } = await this.almacenService.obtenerAlmacen(idAlmacen);
 
     if (!isValid || !data) {
