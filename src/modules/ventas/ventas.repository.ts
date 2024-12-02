@@ -34,7 +34,7 @@ export class VentaRepository {
       let kilosAcumulados = 0;
       for (const estante of estantes) {
         kilosAcumulados += estante.caja.kg;
-        if (kilosAcumulados >= kilos) {
+        if (kilosAcumulados > kilos) {
           estante.caja.kg = kilosAcumulados - kilos;
           await queryRunner.manager.update(
             CajaEntity,
@@ -43,11 +43,16 @@ export class VentaRepository {
           );
           break;
         }
-        await queryRunner.manager.query(
-          'UPDATE estantes set caja=null,fecha_ingreso=null WHERE id=$1 AND division=$2 AND particion=$3',
-          [estante.id, estante.division, estante.particion]
+        
+        await queryRunner.manager.update(
+          CajaEntity,
+          { idCaja: estante.caja.idCaja },
+          { kg: 0 }
         );
-        await queryRunner.manager.delete(CajaEntity, { idCaja: estante.caja.idCaja });
+        await queryRunner.manager.query(
+          'UPDATE estantes SET caja=null,fecha_ingreso=null WHERE id=$1 AND division=$2 AND particion=$3 AND almacen_id=$4',
+          [estante.id, estante.division, estante.particion, tipo]
+        );
       }
       const nuevaVenta = new Venta();
       nuevaVenta.kilosVendidos = kilos;

@@ -7,8 +7,8 @@ export class VentaController {
   venderKilos = async (req: Request, res: Response) => {
     const response = await this.ventaService.crearVenta(req.body.kilos, req.body.tipo);
     if (!response.isValid) {
-      res.status(HTTP_CODE.INTERNAL_SERVER_ERROR).send(response);
+      return res.status(HTTP_CODE.BAD_REQUEST).send(response);
     }
-    res.status(HTTP_CODE.CREATED).json(response);
+    res.status(HTTP_CODE.CREATED).send(response);
   };
 }

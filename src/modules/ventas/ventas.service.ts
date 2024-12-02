@@ -4,12 +4,11 @@ export class VentaService {
   constructor(private readonly ventaRepository: VentaRepository) {}
   async crearVenta(kilos: number, tipo: number) {
     const kgTotalDb = await this.ventaRepository.obtenerKilosTotales(tipo);
-    if (kgTotalDb == null) {
-      return { isValid: false, message: 'los kilos son null' };
-    }
-    if (kilos > kgTotalDb) {
+    
+    if (!kgTotalDb || kilos > kgTotalDb) {
       return { isValid: false, message: 'la cantidad de kilos supera la del almacen' };
     }
+
     await this.ventaRepository.venderCajasAntiguas(kilos, tipo);
     return { isValid: true, message: 'se vendieron ' + kilos + ' kilos' };
   }
