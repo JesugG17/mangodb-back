@@ -29,16 +29,16 @@ export class AlmacenController {
       });
     }
 
-    const { isValid, data } = await this.almacenService.obtenerAlmacen(idAlmacen);
+    const { data: almacenInfo } = await this.almacenService.obtenerAlmacen(idAlmacen);
 
-    if (!isValid || !data) {
+    if (!almacenInfo) {
       return res.status(HTTP_CODE.NOT_FOUND).send({
         isValid: false,
         message: `El almacen con el id ${idAlmacen} no existe`
       });
     }
 
-    const { almacen } = data;
+    const { almacen } = almacenInfo;
     if (caja.tipo !== almacen?.tipo) {
       return res.status(HTTP_CODE.NOT_FOUND).send({
         isValid: false,
