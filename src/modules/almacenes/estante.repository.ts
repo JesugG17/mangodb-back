@@ -11,7 +11,7 @@ export class EstanteRepository {
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
-      await AppDataSource.getRepository(Concurrencia).findOne({
+      await queryRunner.manager.find(Concurrencia,{
         where: { id: id },
         lock: {mode:'pessimistic_write'}
       });
