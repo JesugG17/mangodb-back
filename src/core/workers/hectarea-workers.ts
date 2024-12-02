@@ -19,8 +19,7 @@ export class HectareaWorker implements WorkerInterface {
     const workerInterval = 1000 * 60;
 
     const checarEstatusHectarea = async() => {
-      console.log('SE CORRIO EL CHECAR STATUS');
-      const { isValid, data: hectareas, message} = await this.hectareaService.obtenerHectareas({
+      const { isValid, data: hectareas } = await this.hectareaService.obtenerHectareas({
         status: 'NO COSECHABLE'
       });
 
@@ -32,7 +31,6 @@ export class HectareaWorker implements WorkerInterface {
       for(let i = 0; i < hectareasListasParaCosecha.length; i++) {
         const hectarea = hectareasListasParaCosecha[i];
         await this.hectareaService.actualizarHectarea(hectarea.idHectarea, hectarea);
-
       }
     }
 

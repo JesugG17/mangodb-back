@@ -2,8 +2,6 @@ import { Hectarea } from '../../core/db/entities/hectarea-entity';
 import { Planta } from '../../core/db/entities/planta-entity';
 import { CreateHectareaDto } from './dto/create-hectarea.dto';
 import { AppDataSource } from '../../core/db/data-source';
-import { UpdateHectareaDto } from './dto/update-hectarea.dto';
-import { IsNull, Not } from 'typeorm';
 
 export class HectareaRepository {
   async crearHectarea(nuevaHectarea: CreateHectareaDto) {
