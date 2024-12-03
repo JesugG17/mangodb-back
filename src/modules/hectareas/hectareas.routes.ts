@@ -37,6 +37,12 @@ export class HectareasRoutes {
       hectareaController.autorizarHectarea
     );
 
+    router.put(
+      '/finalizar-cosecha/:idHectarea',
+      validateData(idHectareaSchemaParams, 'params'),
+      hectareaController.finalizarCosecha
+    )
+
     router.get('/by-id/:id', hectareaController.obtenerHectarea);
     return router;
   }
