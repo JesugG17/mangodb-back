@@ -69,10 +69,10 @@ export class SensoresService {
   }
 
   async crearSensorCrecimiento() {
-    const nuevoSensorCrecimiento = new SensorCrecimiento();
-    await this.sensoresRepository.grabarSensorCrecimiento(nuevoSensorCrecimiento);
+    const nuevoSensor = new SensorCrecimiento();
+    await this.sensoresRepository.grabarSensorCrecimiento(nuevoSensor);
 
-    return nuevoSensorCrecimiento;
+    return nuevoSensor;
   }
 
   async crearSensorProducto() {
