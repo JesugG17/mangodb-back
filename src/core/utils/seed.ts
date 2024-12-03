@@ -33,9 +33,19 @@ export class Seed {
       roleId: 3
     };
 
+    const ventas: CreateUserDto = {
+      nombres: 'Ventas',
+      apellido_materno: 'Admin',
+      apellido_paterno: 'Admin',
+      correo: 'ventas@gmail.com',
+      contrasenia: '123456',
+      roleId: 4
+    };
+
     await usersRepository.createUser(admin);
     await usersRepository.createUser(gerenteAlmacen);
     await usersRepository.createUser(liderRecoleccion);
+    await usersRepository.createUser(ventas);
   }
 
 }

@@ -7,7 +7,8 @@ CREATE TABLE roles (
 INSERT INTO roles (nombre) VALUES 
   ('admin'),
   ('gerente_almacen'),
-  ('lider_recoleccion');
+  ('lider_recoleccion'),
+  ('ventas');
 
 
 -- Crear tabla usuarios
@@ -67,6 +68,10 @@ SELECT id, 3
 FROM opciones
 WHERE ruta IN ('/dashboard/inicio', '/dashboard/hectarea');
 
+INSERT INTO roles_opciones (opcionId, roleId)
+SELECT id, 4
+FROM opciones
+WHERE ruta IN ('/dashboard/inicio');
 
 CREATE TABLE sensor_producto (
   id SERIAL PRIMARY KEY,
