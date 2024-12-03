@@ -11,9 +11,7 @@ export class CajaService {
 
     const newId = await this.cajaRepository.guardarCaja(caja);
     caja.setId = newId;
-    if (!caja) {
-      return { isValid: false, reason: 'error al registrar la caja' };
-    }
+   
     return { isValid: true, data: caja };
   }
 

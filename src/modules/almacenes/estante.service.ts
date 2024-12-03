@@ -17,54 +17,66 @@ export class EstanteService {
 
   async asignarEspacioCaja(caja: CajaEntity, almacen: Almacen) {
     const semaforo = new Semaforo(almacen.id);
-    await semaforo.espera();
-    const espaciosOcupados = await this.estanteRepository.checarEspaciosDisponibles(almacen.id);
-
-    if (espaciosOcupados === CAPACIDAD_ALMACEN) {
-      return {
-        isValid: false,
-        message: 'El almacen ya esta lleno'
-      };
-    }
-
-    const cajaYaIngresada = await this.estanteRepository.buscarCajaEnEstante(caja);
-
-    if (cajaYaIngresada) {
-      return {
-        isValid: false,
-        message: 'Esta caja ya fue ingresada al almacen'
-      };
-    }
-    const estante = await this.estanteRepository.obtenerUltimoEstante(almacen.id) as Estante;
-    const siguienteEspacio  = this.calcularSiguienteEspacio({
-      numEstante: estante ? estante.id : 1,
-      numDivision: estante ? estante.division : 1,
-      numParticion: estante ? estante.particion : 0
-    });
-    const estanteDisponible = await this.estanteRepository.obtenerEstanteDisponible({
-      estante: siguienteEspacio.numEstante,
-      division: siguienteEspacio.numDivision,
-      particion: siguienteEspacio.numParticion,
-      almacen: almacen.id
-    }) as Estante;
-   
-    estanteDisponible.caja = caja;
-    estanteDisponible.fechaIngreso = new Date();
-
-    await this.estanteRepository.actualizarEstante(estanteDisponible);
-    await semaforo.libera();
-
-    return {
-      isValid: true,
-      message: 'Caja introducida correctamente',
-      data: {
-        idCaja: estanteDisponible.caja.idCaja,
-        fechaRegistro: estanteDisponible.fechaIngreso,
-        estante: estanteDisponible.id,
-        division: estanteDisponible.division,
-        particion: estanteDisponible.particion
+    try {
+      
+      await semaforo.espera();
+      const espaciosOcupados = await this.estanteRepository.checarEspaciosDisponibles(almacen.id);
+  
+      if (espaciosOcupados === CAPACIDAD_ALMACEN) {
+        return {
+          isValid: false,
+          message: 'El almacen ya esta lleno'
+        };
       }
-    };
+  
+      const cajaYaIngresada = await this.estanteRepository.buscarCajaEnEstante(caja);
+  
+      if (cajaYaIngresada) {
+        return {
+          isValid: false,
+          message: 'Esta caja ya fue ingresada al almacen'
+        };
+      }
+
+      const estante = await this.estanteRepository.obtenerUltimoEstante(almacen.id) as Estante;
+
+      const siguienteEspacio  = this.calcularSiguienteEspacio({
+        numEstante: estante ? estante.id : 1,
+        numDivision: estante ? estante.division : 1,
+        numParticion: estante ? estante.particion : 0
+      });
+      
+      const estanteDisponible = await this.estanteRepository.obtenerEstanteDisponible({
+        estante: siguienteEspacio.numEstante,
+        division: siguienteEspacio.numDivision,
+        particion: siguienteEspacio.numParticion,
+        almacen: almacen.id
+      }) as Estante;
+     
+      estanteDisponible.caja = caja;
+      estanteDisponible.fechaIngreso = new Date();
+  
+      await this.estanteRepository.actualizarEstante(estanteDisponible);
+  
+      return {
+        isValid: true,
+        message: 'Caja introducida correctamente',
+        data: {
+          idCaja: estanteDisponible.caja.idCaja,
+          fechaRegistro: estanteDisponible.fechaIngreso,
+          estante: estanteDisponible.id,
+          division: estanteDisponible.division,
+          particion: estanteDisponible.particion
+        }
+      };
+    } catch (error) {
+      return {
+        isValid: false,
+        message: 'No fue posible asignarle un espacio a la caja'
+      };
+    } finally {
+      await semaforo.libera();
+    }
   }
 
   async obtenerEstantePorId(estanteId: number, almacenId: number) {

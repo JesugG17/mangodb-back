@@ -114,13 +114,6 @@ INSERT INTO almacenes(tipo) VALUES
 ('CALIDAD'),
 ('NO CALIDAD');
 
-CREATE TABLE concurrencia (
-  id serial PRIMARY KEY,
-  calidad number NOT NULL
-);
-INSERT INTO concurrencia(calidad) VALUES (1);
-INSERT INTO concurrencia(calidad) VALUES (2);
-
 CREATE TABLE estantes (
   id INTEGER NOT NULL,
   division INTEGER NOT NULL,
@@ -176,11 +169,11 @@ INSERT INTO estantes (id, division, particion, almacen_id, caja, fecha_ingreso) 
 (2, 2, 4, 2, NULL, NULL),
 (2, 2, 5, 2, NULL, NULL);
 
-create table semaforos (
+create table concurrencia (
   id INTEGER PRIMARY KEY,
   nombre TEXT NOT NULL
 );
 
-INSERT INTO semaforos(id, nombre) VALUES
+INSERT INTO concurrencia(id, nombre) VALUES
 (1, 'CALIDAD'),
-(2, 'NO CALIDAD')
+(2, 'NO CALIDAD');

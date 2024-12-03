@@ -68,7 +68,7 @@ export class HectareaService {
       plantas: hectareaDb.plantas.map(planta => ({
         ...planta,
         aptaSensorCrecimiento: currentDate.getTime() - new Date(planta.fechaCreada).getTime() >= MONTH,
-        aptaSensorProducto: currentDate.getTime() - new Date(planta.fechaCreada).getTime() >= (MONTH * 6)
+        aptaSensorProducto: currentDate.getTime() - new Date(planta.fechaCreada).getTime() >= (MONTH * 2)
       }))
     };
 

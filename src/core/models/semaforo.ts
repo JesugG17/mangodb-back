@@ -15,14 +15,20 @@ export class Semaforo {
 
   public async espera() {
     await this.queryRunner.startTransaction();
-    await this.queryRunner.manager.find(Concurrencia,{
+    await this.queryRunner.manager.find(Concurrencia, {
       where: { id: this.id },
-      lock: {mode:'pessimistic_write'}
+      lock: { mode:'pessimistic_write' }
     }); 
   }
 
   public async libera() {
-    await this.queryRunner.commitTransaction();
-    await this.queryRunner.release();
+    try {
+      await this.queryRunner.commitTransaction();
+    } catch (error) {
+      await this.queryRunner.rollbackTransaction();
+      throw error;
+    } finally {
+      await this.queryRunner.release();
+    }
   }
 }
