@@ -6,6 +6,7 @@ import { CajasRoutes } from './cajas/cajas.routes';
 import { PlantasRoutes } from './plantas/plantas.routes';
 import { AlmacenRoutes } from './almacenes/almacen.routes';
 import { EstanteRoutes } from './almacenes/estante.routes';
+import { VentaRoutes } from './ventas/ventas.routes';
 
 export class AppRoutes {
   static get routes(): Router {
@@ -18,6 +19,7 @@ export class AppRoutes {
     router.use('/api/plantas', PlantasRoutes.routes);
     router.use('/api/almacenes', AlmacenRoutes.routes);
     router.use('/api/estantes', EstanteRoutes.routes);
+    router.use('/api/ventas', VentaRoutes.routes);
 
     return router;
   }

@@ -22,16 +22,23 @@ export class AlmacenController {
       });
     }
 
-    const { isValid, data } = await this.almacenService.obtenerAlmacen(idAlmacen);
+    if (caja.kg === 0) {
+      return res.status(HTTP_CODE.BAD_REQUEST).send({
+        isValid: false,
+        message: 'No se puede ingresar una caja con 0 kilos'
+      });
+    }
 
-    if (!isValid || !data) {
+    const { data: almacenInfo } = await this.almacenService.obtenerAlmacen(idAlmacen);
+
+    if (!almacenInfo) {
       return res.status(HTTP_CODE.NOT_FOUND).send({
         isValid: false,
         message: `El almacen con el id ${idAlmacen} no existe`
       });
     }
 
-    const { almacen } = data;
+    const { almacen } = almacenInfo;
     if (caja.tipo !== almacen?.tipo) {
       return res.status(HTTP_CODE.NOT_FOUND).send({
         isValid: false,

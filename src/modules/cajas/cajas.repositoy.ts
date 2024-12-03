@@ -5,12 +5,13 @@ import { Caja } from "../../core/models/caja-model";
 
 export class CajaRepository {
   async guardarCaja(caja: Caja) {
-    return AppDataSource.getRepository(CajaEntity).insert({
+    const cajaDb = await AppDataSource.getRepository(CajaEntity).insert({
       kg: caja.getKg,
       planta: caja.getPlanta,
       fecha: caja.getFecha,
-      tipo: caja.getTipo
+      tipo: caja.getTipo,
     });
+    return cajaDb.identifiers[0].idCaja;
   }
 
   async obtenerCajaPorId(idCaja: number) {

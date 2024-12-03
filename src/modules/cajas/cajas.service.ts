@@ -9,7 +9,8 @@ export class CajaService {
   async crearCaja(kg: number, tipo: string, planta: Planta) {
     const caja = new Caja(kg, planta, new Date(), tipo);
 
-    await this.cajaRepository.guardarCaja(caja);
+    const newId = await this.cajaRepository.guardarCaja(caja);
+    caja.setId = newId;
     if (!caja) {
       return { isValid: false, reason: 'error al registrar la caja' };
     }
