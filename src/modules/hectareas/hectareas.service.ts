@@ -104,4 +104,30 @@ export class HectareaService {
       message: 'La hectarea ha sido autorizada exitosamente',
     };
   }
+
+  async finalizarCosecha(idHectarea: number) {
+    const hectareaDb = await this.hectareaRepository.obtenerHectareaPorId(idHectarea);
+
+    if (!hectareaDb) {
+      return {
+        isValid: false,
+        message: `El id ${idHectarea} no existe`,
+      };
+    }
+
+    if (hectareaDb.status !== HECTAREA_STATUS.COSECHANDO) {
+      return {
+        isValid: false,
+        message: 'Esta hectarea aun no está en proceso de cosecha',
+      };
+    }
+
+    hectareaDb.setStatus = 'COSECHADA';
+    await this.hectareaRepository.actualizarHectarea(idHectarea, hectareaDb);
+
+    return {
+      isValid: true,
+      message: 'La hectarea ha sido cosechada exitosamente',
+    };
+  }
 }

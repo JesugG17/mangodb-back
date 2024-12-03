@@ -20,9 +20,11 @@ export class HectareaWorker implements WorkerInterface {
 
     const checarEstatusHectarea = async() => {
       const { isValid, data: hectareas } = await this.hectareaService.obtenerHectareas({
-        status: 'NO COSECHABLE'
+        where: {
+          status: 'NO COSECHABLE'
+        }
       });
-
+      
       if (!isValid) {
         return;
       }

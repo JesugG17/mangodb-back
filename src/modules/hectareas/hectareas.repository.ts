@@ -43,9 +43,9 @@ export class HectareaRepository {
         },
         ...filters
       });
+
       return { isValid: true, data: hectareas };
     } catch (error) {
-      console.log(error);
       return { isValid: false, message: 'Error obteniendo hectareas' };
     }
   }
