@@ -79,13 +79,13 @@ export class HectareaService {
     }
   }
 
-  async autorizarHectarea(idHectarea: number) {
-    const hectareaDb = await this.hectareaRepository.obtenerHectareaPorId(idHectarea);
+  async autorizarHectarea(idHect: number) {
+    const hectareaDb = await this.hectareaRepository.obtenerHectareaPorId(idHect);
 
     if (!hectareaDb) {
       return {
         isValid: false,
-        message: `El id ${idHectarea} no existe`,
+        message: `El id ${idHect} no existe`,
       };
     }
 
@@ -97,7 +97,7 @@ export class HectareaService {
     }
 
     hectareaDb.setStatus = 'COSECHANDO';
-    await this.hectareaRepository.actualizarHectarea(idHectarea, hectareaDb);
+    await this.hectareaRepository.actualizarHectarea(idHect, hectareaDb);
 
     return {
       isValid: true,

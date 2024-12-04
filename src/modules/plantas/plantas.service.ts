@@ -17,9 +17,9 @@ export class PlantasService {
         isValid: false,
         message: `La planta con el id ${plantaId} no existe`,
         code: 400
-      }
-    
+      };    
     }
+
     if (plantaDb.sensorCrecimiento) {
       return {
         isValid: false,

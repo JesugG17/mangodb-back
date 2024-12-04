@@ -80,7 +80,8 @@ export class HectareasController {
   };
 
   autorizarHectarea = async (req: Request, res: Response) => {
-    const response = await this.hectareaService.autorizarHectarea(req.params.idHectarea as any);
+    const idHect = req.params.idHectarea;
+    const response = await this.hectareaService.autorizarHectarea(+idHect);
     res.send(response);
   };
 
