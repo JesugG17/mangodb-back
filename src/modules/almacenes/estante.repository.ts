@@ -5,25 +5,6 @@ import { CajaEntity } from "../../core/db/entities/caja-entity";
 import { Concurrencia } from "../../core/db/entities/concurrencia-entity";
 
 export class EstanteRepository {
-  async abrirConcurrencia(id: number) {
-    const queryRunner = AppDataSource.createQueryRunner();
-
-    await queryRunner.connect();
-    await queryRunner.startTransaction();
-    try {
-      await queryRunner.manager.find(Concurrencia,{
-        where: { id: id },
-        lock: {mode:'pessimistic_write'}
-      });
-    } catch (error) {
-      
-    }
-    return queryRunner;
-  }
-  async cerrarConcurrencia(concurrencia: QueryRunner) {
-    await concurrencia.commitTransaction();
-    await concurrencia.release();
-  }
   async checarEspaciosDisponibles(idAlmacen: number) {
     return await AppDataSource.getRepository(Estante).count({
       where: {
