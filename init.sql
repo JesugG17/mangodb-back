@@ -181,4 +181,6 @@ create table concurrencia (
 
 INSERT INTO concurrencia(id, nombre) VALUES
 (1, 'CALIDAD'),
-(2, 'NO CALIDAD');
+(2, 'NO CALIDAD'),
+(3, 'VENTA-CALIDAD'),
+(4, 'VENTA-NO-CALIDAD');
